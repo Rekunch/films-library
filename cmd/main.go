@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -45,27 +44,45 @@ func main() {
 
 			command := strings.Split(update.Message.Text, " ")
 
-			switch command[0] {
-			case "Рандом", "рандом", "случайный":
-				bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "Хорошо, сейчас поищу"))
-				message := tgbotapi.NewMessage(update.Message.Chat.ID, kinopoisk_dev.Random())
-				message.ParseMode = "html"
-				bot.Send(message)
-			case "Найди", "Найти", "найди", "найти":
+			switch strings.ToLower(command[0]) {
+			case "рандом", "случайный":
+				sendMessage(bot, update.Message.Chat.ID, "Хорошо, сейчас поищу")
+
+				result := kinopoisk_dev.Random()
+				sendMessageWithHtml(bot, update.Message.Chat.ID, result)
+			case "найти", "найди":
 				if len(command) < 2 {
-					bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "Укажите название фильма вторым параметром"))
-					break
+					sendMessage(bot, update.Message.Chat.ID, "Укажите название фильма вторым параметром")
+					return
 				}
-				bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Ищу по названию \"%s\", пожождите пожалуйста", command[1])))
-				slice := kinopoisk_dev.FindMovieByName(command[1])
-				for i := 0; i < len(slice); i++ {
-					message := tgbotapi.NewMessage(update.Message.Chat.ID, slice[i])
-					message.ParseMode = "html"
-					bot.Send(message)
+				searchResult := kinopoisk_dev.FindMovieByName(command[1])
+				if len(searchResult) == 0 {
+					sendMessage(bot, update.Message.Chat.ID, "Не удалось найти фильм")
+					return
+				}
+				for _, result := range searchResult {
+					sendMessageWithHtml(bot, update.Message.Chat.ID, result)
 				}
 			default:
-				bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "Не удалось распознать команду"))
+				sendMessage(bot, update.Message.Chat.ID, "Не удалось распознать команду")
 			}
 		}
+	}
+}
+
+func sendMessage(bot *tgbotapi.BotAPI, chatID int64, message string) {
+	msg := tgbotapi.NewMessage(chatID, message)
+	_, err := bot.Send(msg)
+	if err != nil {
+		return
+	}
+}
+
+func sendMessageWithHtml(bot *tgbotapi.BotAPI, chatID int64, message string) {
+	msg := tgbotapi.NewMessage(chatID, message)
+	msg.ParseMode = "html"
+	_, err := bot.Send(msg)
+	if err != nil {
+		return
 	}
 }
