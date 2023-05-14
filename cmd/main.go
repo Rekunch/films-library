@@ -29,7 +29,6 @@ func main() {
 	}
 
 	bot.Debug = true
-
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
 	u := tgbotapi.NewUpdate(0)
@@ -49,7 +48,9 @@ func main() {
 			switch command[0] {
 			case "Рандом", "рандом", "случайный":
 				bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "Хорошо, сейчас поищу"))
-				bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, kinopoisk_dev.Random()))
+				message := tgbotapi.NewMessage(update.Message.Chat.ID, kinopoisk_dev.Random())
+				message.ParseMode = "html"
+				bot.Send(message)
 			case "Найди", "Найти", "найди", "найти":
 				if len(command) < 2 {
 					bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "Укажите название фильма вторым параметром"))
@@ -58,7 +59,9 @@ func main() {
 				bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Ищу по названию \"%s\", пожождите пожалуйста", command[1])))
 				slice := kinopoisk_dev.FindMovieByName(command[1])
 				for i := 0; i < len(slice); i++ {
-					bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, slice[i]))
+					message := tgbotapi.NewMessage(update.Message.Chat.ID, slice[i])
+					message.ParseMode = "html"
+					bot.Send(message)
 				}
 			default:
 				bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "Не удалось распознать команду"))

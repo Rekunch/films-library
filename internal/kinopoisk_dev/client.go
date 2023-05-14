@@ -44,7 +44,7 @@ func Random() string {
 	}
 	joinedCountries := strings.Join(countryNames, ", ")
 
-	movieInfo := fmt.Sprintf("Название фильма: %s\nЖанр: %s\nСтрана: %s\nДлительность: %d минут\nОписание:%s\nРейтинг Imdb: %.2f\nРейтинг Кинопоиска: %.2f\nГод выпуска: %d\n%s", movie.Name, joinedGenres, joinedCountries, movie.Length, movie.Description, movie.Rating.Imdb, movie.Rating.Kp, movie.Year, movie.Poster.PreviewUrl)
+	movieInfo := fmt.Sprintf("<b>Название фильма:</b> %s\n<b>Жанр:</b> %s\n<b>Страна:</b> %s\n<b>Длительность:</b> %d минут\n<b>Описание:</b> %s\n<b>Рейтинг Imdb:</b> %.2f\n<b>Рейтинг Кинопоиска:</b> %.2f\n<b>Год выпуска:</b> %d\n%s", movie.Name, joinedGenres, joinedCountries, movie.Length, movie.Description, movie.Rating.Imdb, movie.Rating.Kp, movie.Year, movie.Poster.PreviewUrl)
 
 	return movieInfo
 }
@@ -84,7 +84,7 @@ func FindMovieByName(name string) []string {
 			countryNames = append(countryNames, country.Name)
 		}
 		joinedCountries := strings.Join(countryNames, ", ")
-		movieInfo := fmt.Sprintf("Название фильма: %s\nЖанр: %s\nСтрана: %s\nДлительность: %d минут\nОписание:%s\nРейтинг Imdb: %.2f\nРейтинг Кинопоиска: %.2f\nГод выпуска: %d\n%s\n\n", movie.Docs[i].Name, joinedGenres, joinedCountries, movie.Docs[i].Length, movie.Docs[i].Description, movie.Docs[i].Rating.Imdb, movie.Docs[i].Rating.Kp, movie.Docs[i].Year, movie.Docs[i].Poster.PreviewUrl)
+		movieInfo := fmt.Sprintf("<b>Название фильма:</b> %s\n<b>Жанр:</b> %s\n<b>Страна:</b> %s\n<b>Длительность:</b> %d минут\n<b>Описание:</b> %s\n<b>Рейтинг Imdb:</b> %.2f\n<b>Рейтинг Кинопоиска:</b> %.2f\n<b>Год выпуска:</b> %d\n%s", movie.Docs[i].Name, joinedGenres, joinedCountries, movie.Docs[i].Length, movie.Docs[i].Description, movie.Docs[i].Rating.Imdb, movie.Docs[i].Rating.Kp, movie.Docs[i].Year, movie.Docs[i].Poster.PreviewUrl)
 		movieInfoList = append(movieInfoList, movieInfo)
 
 		// clear genres and countries for the next iteration
